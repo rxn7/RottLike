@@ -14,8 +14,10 @@ public:
     void draw(sf::RenderWindow& window) override;
 
 private:
+    sf::View m_camera, m_gui_camera;
+
     LocalPlayer* mp_player;
-    FpsTimer m_fps_timer;
     RottEngine::Client mp_client;
+
+    FpsTimer m_fps_timer;
     sf::Clock m_tick_rate_clock;
-};

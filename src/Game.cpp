@@ -6,6 +6,8 @@ Game::~Game(){
     delete m_state;
 }
 
+// TODO: Main Menu with proper GUI
+
 Game::Game(){
     RottEngine::AssetManager::addFont("res/font.ttf");
     RottEngine::AssetManager::addTexture("res/sprites/player.png");

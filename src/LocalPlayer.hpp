@@ -19,6 +19,5 @@ public:
 private:
     sf::Vector2f m_previous_pos;
     RottEngine::Client* mp_client;
-    sf::Text m_nickname_text;
-    std::string m_nickname;
+    NameTag m_nametag;
 };

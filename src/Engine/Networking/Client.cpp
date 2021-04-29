@@ -69,6 +69,7 @@ namespace RottEngine{
 
                     case SERVER_PLAYER_MOVED:{
                         sf::Uint8 client_slot;
+
                         float px, py;
                         received_packet >> client_slot >> px >> py;
 

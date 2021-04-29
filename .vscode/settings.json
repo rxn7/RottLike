@@ -55,6 +55,11 @@
         "xhash": "cpp",
         "list": "cpp",
         "set": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "thread": "cpp",
+        "chrono": "cpp",
+        "ratio": "cpp",
+        "deque": "cpp",
+        "stack": "cpp"
     }
 }

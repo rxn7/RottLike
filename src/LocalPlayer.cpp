@@ -1,14 +1,19 @@
 #include "LocalPlayer.hpp"
 #include "Engine/Networking/Packets.hpp"
 
-LocalPlayer::LocalPlayer(RottEngine::Client* p_client) : mp_client(p_client){
+LocalPlayer::LocalPlayer(RottEngine::Client* p_client, const std::string& nickname) : mp_client(p_client), m_nickname(nickname){
     m_sprite.setTexture(*RottEngine::AssetManager::getTexture("res/sprites/player.png"));
     m_sprite.setScale(3,3);
+
+    m_nickname_text.setFont(*RottEngine::AssetManager::getFont("res/font.ttf"));
+    m_nickname_text.setScale(0.6, 0.6);
+    m_nickname_text.setString(m_nickname);
+    m_nickname_text.setOrigin(m_nickname_text.getGlobalBounds().width/2, 0);
 }
 
 LocalPlayer::~LocalPlayer(){ }
 
-void LocalPlayer::update(sf::Time dt, sf::RenderWindow& window){
+void LocalPlayer::update(const sf::Time& dt){
     sf::Vector2f move_dir;
 
     float speed = PLAYER_MOVE_SPEED * dt.asSeconds();
@@ -19,6 +24,9 @@ void LocalPlayer::update(sf::Time dt, sf::RenderWindow& window){
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){ move_dir.x += speed; }
 
     m_sprite.move(move_dir);
+
+    sf::Vector2f pos = m_sprite.getPosition();
+    m_nickname_text.setPosition(pos.x, pos.y-8);
 }
 
 void LocalPlayer::update_network(){
@@ -33,4 +41,9 @@ void LocalPlayer::update_network(){
     }
 
     m_previous_pos = curr_pos;
+}
+
+void LocalPlayer::draw(sf::RenderWindow& window) {
+    window.draw(m_sprite);
+    window.draw(m_nickname_text);
 }

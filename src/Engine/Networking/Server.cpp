@@ -49,48 +49,9 @@ namespace RottEngine{
     void Server::handleConnections(){
         sf::TcpSocket* new_client = new sf::TcpSocket();
         if(m_listener.accept(*new_client) == sf::Socket::Done){
-            // Add the client 
-            {
-                m_clients.push_back(new_client);
-                m_selector.add(*new_client);
-                
-                // Get the new client slot
-                std::vector<sf::TcpSocket*>::iterator itr = std::find(m_clients.begin(), m_clients.end(), new_client);
-                sf::Uint8 new_client_slot = std::distance(m_clients.begin(), itr);
-
-                std::cout << "Client with ip: " << new_client->getRemoteAddress() << " has connected. Their slot will be: " << (int)new_client_slot << std::endl;
-                
-                // Notify all the clients about the new client
-                {
-                    sf::Packet player_connected_packet;
-                    player_connected_packet << sf::Uint8(SERVER_PLAYER_CONNECTED) << new_client_slot;
-
-                    for(sf::TcpSocket* client : m_clients){
-                        if(client != new_client){
-                            client->send(player_connected_packet);
-                        }
-                    }
-
-                    player_connected_packet.clear();
-                }
-            }
-
-            // Add all the clients to the new client
-            {
-                for(sf::TcpSocket* client : m_clients){
-                    if(client != new_client){
-                        std::vector<sf::TcpSocket*>::iterator itr = std::find(m_clients.begin(), m_clients.end(), client);
-                        sf::Uint8 client_slot = std::distance(m_clients.begin(), itr);
-
-                        sf::Packet player_connected_packet;
-                        player_connected_packet << sf::Uint8(SERVER_PLAYER_CONNECTED) << client_slot;
-
-                        new_client->send(player_connected_packet);
-
-                        player_connected_packet.clear();
-                    }
-                }
-            }
+            std::cout << "Player with ip: " << new_client->getRemoteAddress() << " is trying to connect..." << std::endl;
+            m_clients.push_back(new_client);
+            m_selector.add(*new_client);
         }else{
             std::cerr << "Eror listening to new clients conection. Restart the server!" << std::endl;
             delete new_client;
@@ -101,7 +62,6 @@ namespace RottEngine{
     void Server::receivePackets(){
         for(std::vector<sf::TcpSocket*>::iterator it = m_clients.begin(); it != m_clients.end(); it++){
             sf::TcpSocket* client = *it;
-            
             sf::Uint8 slot = std::distance(m_clients.begin(), it);
 
             if(m_selector.isReady(*client)){
@@ -134,6 +94,43 @@ namespace RottEngine{
                                 }
                                 break;
                             }
+
+
+                            case CLIENT_CONNECTED:{
+                                std::string nickname;
+                                packet >> nickname;
+                                
+                                m_client_nicknames.push_back(nickname);
+
+                                std::vector<sf::TcpSocket*>::iterator itr = std::find(m_clients.begin(), m_clients.end(), client);
+                                sf::Uint8 slot = std::distance(m_clients.begin(), itr);
+
+                                // Get the new client slot
+                                std::cout << "Client with ip: " << client->getRemoteAddress() << " and nick " << nickname << " has connected. Their slot will be: " << (int)slot << std::endl;
+
+                                // Notify the new player about all the connected players
+                                for(sf::TcpSocket* c : m_clients){
+                                    if(c != client){
+                                        std::vector<sf::TcpSocket*>::iterator itr = std::find(m_clients.begin(), m_clients.end(), c);
+                                        sf::Uint8 client_slot = std::distance(m_clients.begin(), itr);
+                                        sf::Packet player_connected_packet;
+                                        player_connected_packet << sf::Uint8(SERVER_PLAYER_CONNECTED) << client_slot << m_client_nicknames[client_slot];
+
+                                        client->send(player_connected_packet);
+                                        player_connected_packet.clear();
+                                    }
+                                }
+
+                                // Notify all the clients about the new client
+                                sf::Packet player_connected_packet;
+                                player_connected_packet << sf::Uint8(SERVER_PLAYER_CONNECTED) << slot << nickname;
+
+                                for(sf::TcpSocket* c : m_clients){
+                                    if(c != client){
+                                        c->send(player_connected_packet);
+                                    }
+                                }
+                            };
                         }
                     }
                 }else if(status == sf::Socket::Disconnected){
@@ -144,22 +141,29 @@ namespace RottEngine{
     }
 
     void Server::disconnectClient(sf::TcpSocket* p_client, sf::Uint8 slot){
-        std::cout << "Client with ip: " << p_client->getRemoteAddress() << " has disconnected." << std::endl;
+        std::cout << "Client with ip: " << p_client->getRemoteAddress() << " and nick: " << m_client_nicknames[slot] << " has disconnected." << std::endl;
         p_client->disconnect();
         delete p_client;
+
         m_clients.erase(m_clients.begin() + slot);
+        m_client_nicknames.erase(m_client_nicknames.begin() + slot);
 
         // Notify every player that the client has disconnected
         sf::Packet player_disconnected_packet;
         player_disconnected_packet << sf::Uint8(SERVER_PLAYER_DISCONNECTED) << slot;
 
-        for(sf::TcpSocket* client : m_clients){
-            client->send(player_disconnected_packet);
+        for(sf::TcpSocket* c : m_clients){
+            c->send(player_disconnected_packet);
         }
     }
+
     void Server::sendPacket(sf::TcpSocket* p_client, sf::Packet& packet){
         if(p_client->send(packet) != sf::Socket::Done){
             std::cerr << "Couldn't send packet!" << std::endl;
+            std::vector<sf::TcpSocket*>::iterator itr = std::find(m_clients.begin(), m_clients.end(), p_client);
+            sf::Uint8 client_slot = std::distance(m_clients.begin(), itr);
+
+            disconnectClient(p_client, client_slot);
         }
     }
 }

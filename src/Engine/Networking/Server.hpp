@@ -18,6 +18,9 @@ namespace RottEngine{
     private:
         sf::TcpListener m_listener;
         sf::SocketSelector m_selector;
+
+        // Todo: move it to a single class
         std::vector<sf::TcpSocket*> m_clients;
+        std::vector<std::string> m_client_nicknames;
     };
 }

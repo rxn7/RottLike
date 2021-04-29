@@ -10,12 +10,15 @@
 
 class LocalPlayer : public RottEngine::Entity {
 public:
-    LocalPlayer(RottEngine::Client* p_client);
+    LocalPlayer(RottEngine::Client* p_client, const std::string& nickname);
     virtual ~LocalPlayer();
-    void update(sf::Time dt, sf::RenderWindow& window) override;
+    void update(const sf::Time& dt) override;
     void update_network();
+    void draw(sf::RenderWindow& window) override;
     
 private:
     sf::Vector2f m_previous_pos;
     RottEngine::Client* mp_client;
+    sf::Text m_nickname_text;
+    std::string m_nickname;
 };

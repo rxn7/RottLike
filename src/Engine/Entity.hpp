@@ -5,8 +5,8 @@ namespace RottEngine{
     class Entity {
     public:
         virtual ~Entity() {}
-        virtual void update(sf::Time dt, sf::RenderWindow& window) = 0;
-        void draw(sf::RenderWindow& window);
+        virtual void update(const sf::Time& dt) = 0;
+        virtual void draw(sf::RenderWindow& window);
 
     protected:
         sf::Texture* m_texture;

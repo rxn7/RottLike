@@ -7,6 +7,7 @@ OnlinePlayer::~OnlinePlayer(){
 OnlinePlayer::OnlinePlayer() : m_nametag(this) {
     m_sprite.setTexture(*RottEngine::AssetManager::getTexture("res/sprites/online_player.png"));
     m_sprite.setScale(3,3);
+    RottEngine::Utils::center(&m_sprite);
 }
 
 void OnlinePlayer::setPosition(float x, float y){

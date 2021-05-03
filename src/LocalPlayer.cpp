@@ -5,9 +5,12 @@ LocalPlayer::LocalPlayer(RottEngine::Client* p_client, const std::string& nickna
     m_sprite.setTexture(*RottEngine::AssetManager::getTexture("res/sprites/player.png"));
     m_sprite.setScale(3,3);
     m_nametag.setName(nickname.c_str(), sf::Color::Blue);
+    RottEngine::Utils::center(&m_sprite);
 }
 
-LocalPlayer::~LocalPlayer(){ }
+LocalPlayer::~LocalPlayer(){ 
+    delete mp_client;
+}
 
 void LocalPlayer::update(const sf::Time& dt){
     sf::Vector2f move_dir;
@@ -25,7 +28,7 @@ void LocalPlayer::update(const sf::Time& dt){
     m_nametag.update();
 }
 
-void LocalPlayer::update_network(){
+void LocalPlayer::tick(){
     // If the position has changed, send the player moved packet to the server
     sf::Vector2f curr_pos = m_sprite.getPosition();
 
@@ -42,4 +45,8 @@ void LocalPlayer::update_network(){
 void LocalPlayer::draw(sf::RenderWindow& window) {
     window.draw(m_sprite);
     m_nametag.draw(window);
+}
+
+RottEngine::Client* LocalPlayer::getClient() const {
+    return mp_client;
 }

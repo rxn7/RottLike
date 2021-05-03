@@ -11,9 +11,11 @@ namespace RottEngine{
         static void cleanup();
 
         static void addTexture(const std::string& path);
+        static void delTexture(const std::string& path);
         static sf::Texture* getTexture(const std::string& path);
 
         static void addFont(const std::string& path);
+        static void delFont(const std::string& path);
         static sf::Font* getFont(const std::string& path);
 
     private:

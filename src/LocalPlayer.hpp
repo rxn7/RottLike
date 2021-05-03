@@ -13,8 +13,10 @@ public:
     LocalPlayer(RottEngine::Client* p_client, const std::string& nickname);
     virtual ~LocalPlayer();
     void update(const sf::Time& dt) override;
-    void update_network();
+    void tick();
     void draw(sf::RenderWindow& window) override;
+
+    RottEngine::Client* getClient() const;
     
 private:
     sf::Vector2f m_previous_pos;

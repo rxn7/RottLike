@@ -60,6 +60,8 @@
         "chrono": "cpp",
         "ratio": "cpp",
         "deque": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "functional": "cpp",
+        "*.rh": "cpp"
     }
 }

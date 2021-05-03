@@ -2,6 +2,7 @@
 
 namespace RottEngine{
     Client::~Client(){
+        m_socket.disconnect();
         m_update_thread.join();
 
         for(auto& player : m_online_players){
@@ -11,7 +12,7 @@ namespace RottEngine{
 
     bool Client::connect(const char* address, unsigned short port, const std::string& nickname){
         if(m_socket.connect(address, port) != sf::Socket::Done){
-            std::cerr << "Could not connect to the server!" << std::endl;
+            std::cerr << "Couldn't connect to the server!" << std::endl;
             return false;    
         }
         
@@ -29,6 +30,7 @@ namespace RottEngine{
         while(true){
             sf::Packet received_packet;
             if(m_socket.receive(received_packet) == sf::Socket::Done){            
+                // Check packet type
                 sf::Uint8 packet_type;
                 received_packet >> packet_type;
 
@@ -76,6 +78,19 @@ namespace RottEngine{
                         if(m_online_players.count(client_slot)){
                             m_online_players[client_slot]->setPosition(px,py);
                         }
+
+                        break;
+                    }
+
+                    case SERVER_CHAT:{
+                        sf::Uint8 slot;
+                        std::string msg;
+
+                        received_packet >> slot >> msg;
+                        OnlinePlayer* player = m_online_players[slot];
+
+                        std::cout << "[CHAT] " << player->getNickname() << ": " << msg << std::endl;
+                        Chat::addMessage(player, msg);
 
                         break;
                     }

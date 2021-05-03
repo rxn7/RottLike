@@ -3,41 +3,63 @@
 #define TICK_RATE 0.0416 // 24 tickrate
 
 Game::~Game(){
+    delete mp_window;
     delete m_state;
 }
 
-// TODO: Main Menu with proper GUI
+Game* Game::instance;
 
 Game::Game(){
-    RottEngine::AssetManager::addFont("res/font.ttf");
-    RottEngine::AssetManager::addTexture("res/sprites/player.png");
-    RottEngine::AssetManager::addTexture("res/sprites/online_player.png");
-    
-    m_state = new GameState();
+    instance = this;
 
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Rott Like"); window.setFramerateLimit(144);
+    RottEngine::AssetManager::addFont("res/font.ttf");
+
+    m_state = new SplashScreenState();
+
+    mp_window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Rott Like", sf::Style::Titlebar | sf::Style::Close);
     sf::Clock deltaClock;
 
-    while (window.isOpen()) {
-        sf::Time dt = deltaClock.restart();
+    while (mp_window->isOpen()) {
+        // Dont do anything if the current state isn't ready
+        if(!m_state->isReady()){
+            continue;
+        }
+        
+        if(m_change_state){
+            m_state = m_new_state;
+            m_change_state = false;
+            continue;
+        }
 
+        sf::Time dt = deltaClock.restart();
         sf::Event event;
-        while (window.pollEvent(event)) {
+        while (mp_window->pollEvent(event)) {
             if (event.type == sf::Event::Closed){ 
-                window.close(); 
+                mp_window->close(); 
                 return;
             }
             
             m_state->processEvent(event);
         }
 
-        window.clear();
+        RottEngine::Input::update(*mp_window);
+
+        mp_window->clear();
         
         m_state->update(dt);
-        m_state->draw(window);
+        m_state->draw(*mp_window);
 
-        window.display();
+        mp_window->display();
     }
-    
+
     RottEngine::AssetManager::cleanup();
+}
+
+void Game::changeState(RottEngine::State* new_state){
+    instance->m_change_state = true;
+    instance->m_new_state = new_state;
+}
+
+sf::RenderWindow* Game::getWindow(){
+    return instance->mp_window;
 }

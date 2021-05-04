@@ -25,7 +25,7 @@ GameState::GameState() {
 
     mp_player = new LocalPlayer(&m_client, nickname);
 
-    m_chat = Chat(&m_client);
+    m_chat = Chat(&m_client, this);
     m_camera = sf::View(sf::Vector2f(0,0), sf::Vector2f(640, 480));
     m_gui_camera = sf::View(sf::Vector2f((float)640/2, (float)480/2), sf::Vector2f(640, 480));
     m_tilemap = RottEngine::Tilemap(RottEngine::AssetManager::getTexture("res/sprites/tileset.png"), 24, 24, 16, 64);
@@ -77,4 +77,8 @@ void GameState::draw(sf::RenderWindow& window){
     window.draw(m_pos_text);
     m_fps_timer.draw(window);
     m_chat.draw(window);
+}
+
+LocalPlayer* GameState::getPlayer() const{
+    return mp_player;
 }

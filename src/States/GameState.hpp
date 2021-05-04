@@ -1,9 +1,10 @@
+#pragma once
+
 #include "Engine/StateMachine/State.hpp"
 #include "Engine/Rendering/Tilemap.hpp"
 #include "Engine/AssetManager.hpp"
-#include "Engine/Networking/Client.hpp"
-#include "LocalPlayer.hpp"
 #include "FpsTimer.hpp"
+#include "LocalPlayer.hpp"
 #include "Chat.hpp"
 
 class GameState : public RottEngine::State{
@@ -14,6 +15,8 @@ public:
     void processEvent(const sf::Event& event) override;
     void update(const sf::Time& dt) override;
     void draw(sf::RenderWindow& window) override;
+
+    LocalPlayer* getPlayer() const;
 
 private:
     Chat m_chat;

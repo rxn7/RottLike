@@ -64,6 +64,9 @@ namespace RottEngine {
                 sf::Vector2f mouse_pos(RottEngine::Input::getMousePos());
                 if(m_shape.getGlobalBounds().contains(mouse_pos)){
                     mp_active = this;
+                }else {
+                    // FIXME: this will cause problems when having more than one textbox
+                    //mp_active = nullptr;
                 }
             }
             

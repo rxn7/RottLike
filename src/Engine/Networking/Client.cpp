@@ -19,6 +19,8 @@ namespace RottEngine{
         std::cout << "Connected to the server!" << std::endl;
         m_update_thread = std::thread(&receivePackets, this);
 
+        m_nickname = nickname;
+
         sf::Packet nickname_packet;
         nickname_packet << sf::Uint8(CLIENT_CONNECTED) << nickname;
         sendPacket(nickname_packet);
@@ -105,7 +107,11 @@ namespace RottEngine{
         }
     }
 
-    const std::unordered_map<sf::Uint8, OnlinePlayer*>& Client::getOnlinePlayers(){
+    const std::unordered_map<sf::Uint8, OnlinePlayer*>& Client::getOnlinePlayers() const{
         return m_online_players;
+    }
+
+    const std::string Client::getNickname() const {
+        return m_nickname;
     }
 }

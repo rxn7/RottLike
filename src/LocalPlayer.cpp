@@ -13,6 +13,10 @@ LocalPlayer::~LocalPlayer(){
 }
 
 void LocalPlayer::update(const sf::Time& dt){
+    if(!m_can_move){
+        return;
+    }
+
     sf::Vector2f move_dir;
 
     float speed = PLAYER_MOVE_SPEED * dt.asSeconds();
@@ -29,6 +33,10 @@ void LocalPlayer::update(const sf::Time& dt){
 }
 
 void LocalPlayer::tick(){
+    if(!m_can_move){
+        return;
+    }
+
     // If the position has changed, send the player moved packet to the server
     sf::Vector2f curr_pos = m_sprite.getPosition();
 
@@ -49,4 +57,8 @@ void LocalPlayer::draw(sf::RenderWindow& window) {
 
 RottEngine::Client* LocalPlayer::getClient() const {
     return mp_client;
+}
+
+void LocalPlayer::setCanMove(bool value){
+    m_can_move = value;
 }

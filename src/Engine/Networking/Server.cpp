@@ -24,6 +24,7 @@ namespace RottEngine{
         m_selector.add(m_listener);
 
         sf::Clock tickRateClock;
+        // Tick loop
         while(true){
             if(tickRateClock.getElapsedTime().asSeconds() >= TICK_RATE){
                 tickRateClock.restart();
@@ -158,7 +159,8 @@ namespace RottEngine{
 
     void Server::disconnectClient(ServerClient* p_client, sf::Uint8 slot){
         std::cout << "Client with ip: " << p_client->m_socket->getRemoteAddress() << " and nick: " << p_client->m_nickname << " has disconnected." << std::endl;
-
+        
+        // Remove the client from the server
         m_clients.erase(m_clients.begin() + getSlot(p_client));
         m_selector.remove(*p_client->m_socket);
         p_client->m_socket->disconnect();

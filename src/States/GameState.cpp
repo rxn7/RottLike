@@ -27,7 +27,7 @@ GameState::GameState() {
 
     m_chat = Chat(&m_client, this);
     m_camera = sf::View(sf::Vector2f(0,0), sf::Vector2f(640, 480));
-    m_gui_camera = sf::View(sf::Vector2f((float)640/2, (float)480/2), sf::Vector2f(640, 480));
+    m_gui_camera = sf::View(sf::Vector2f((float)860/2, (float)640/2), sf::Vector2f(860, 640));
     m_tilemap = RottEngine::Tilemap(RottEngine::AssetManager::getTexture("res/sprites/tileset.png"), 24, 24, 16, 64);
 
     m_pos_text.move(0, 30);
@@ -35,6 +35,71 @@ GameState::GameState() {
     m_pos_text.setFont(*RottEngine::AssetManager::getFont("res/font.ttf"));
 
     m_ready = true;
+}
+
+void GameState::processPacket(sf::Packet& packet, sf::Uint8 type){
+    switch(type){
+        case SERVER_PLAYER_CONNECTED:{
+            sf::Uint8 client_slot;
+            std::string client_nickname;
+            packet >> client_slot >> client_nickname;
+
+            OnlinePlayer* new_player = new OnlinePlayer();
+            new_player->setNickname(client_nickname);
+
+            m_client.getOnlinePlayers()->insert({client_slot, new_player});
+            std::cout << "Player with slot " << (int)client_slot << " and nick " << client_nickname << " has connected." << std::endl;
+            break;
+        }
+
+        case SERVER_PLAYER_DISCONNECTED:{
+            sf::Uint8 client_slot;
+            packet >> client_slot;
+
+            if(m_client.getOnlinePlayers()->count(client_slot)){
+                OnlinePlayer* player = m_client.getOnlinePlayers()->at(client_slot);
+                
+                m_chat.addPlayerDisconnectedMessage(player->getNickname());
+                std::cout << "Player with slot " << (int)client_slot << " and nick: " << player->getNickname() << " has disconnected." << std::endl;
+                
+                delete m_client.getOnlinePlayers()->at(client_slot);
+                m_client.getOnlinePlayers()->erase(client_slot);
+            }
+            break;
+        }
+
+        case SERVER_PLAYER_MOVED:{
+            sf::Uint8 client_slot;
+
+            float px, py;
+            packet >> client_slot >> px >> py;
+
+            if(m_client.getOnlinePlayers()->count(client_slot)){
+                m_client.getOnlinePlayers()->at(client_slot)->setPosition(px,py);
+            }
+            break;
+        }
+
+        case SERVER_CHAT:{
+            sf::Uint8 slot;
+            std::string msg;
+
+            packet >> slot >> msg;
+            OnlinePlayer* player = m_client.getOnlinePlayers()->at(slot);
+
+            if(player == nullptr){
+                std::cout << "[CHAT] " << "Error receiving a message. Player pointer is null." << std::endl;
+                return;
+            }
+
+            std::string nick = player->getNickname();
+
+            std::cout << "[CHAT] " << nick << ": " << msg << std::endl;
+
+            m_chat.addMessage(nick, msg);
+            break;
+        }
+    }
 }
 
 void GameState::processEvent(const sf::Event& event){
@@ -59,6 +124,7 @@ void GameState::update(const sf::Time& dt){
     m_chat.update();
 
     m_camera.setCenter(mp_player->getSprite()->getPosition());
+    m_chat.update();
 }
 
 void GameState::draw(sf::RenderWindow& window){
@@ -66,7 +132,7 @@ void GameState::draw(sf::RenderWindow& window){
     window.setView(m_camera);
     m_tilemap.draw(window, sf::RenderStates::Default);
 
-    for(auto& player : m_client.getOnlinePlayers()){
+    for(auto& player : *m_client.getOnlinePlayers()){
         player.second->draw(window);
     }
 

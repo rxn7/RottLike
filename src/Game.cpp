@@ -7,6 +7,8 @@ Game::~Game(){
     delete m_state;
 }
 
+std::mutex packets_mutex;
+
 Game* Game::instance;
 
 Game::Game(){
@@ -42,6 +44,8 @@ Game::Game(){
             m_state->processEvent(event);
         }
 
+        processPackets();
+
         RottEngine::Input::update(*mp_window);
 
         mp_window->clear();
@@ -55,9 +59,31 @@ Game::Game(){
     RottEngine::AssetManager::cleanup();
 }
 
+void Game::processPackets(){
+    if(m_state != nullptr && m_state->isReady()){
+        packets_mutex.lock();
+        while(m_packets.size() > 0){
+            sf::Packet packet = m_packets.front();
+            sf::Uint8 type;
+            packet >> type;
+
+            m_state->processPacket(packet, type);
+
+            m_packets.pop();
+        }
+        packets_mutex.unlock();
+    }
+}
+
 void Game::changeState(RottEngine::State* new_state){
     instance->m_change_state = true;
     instance->m_new_state = new_state;
+}
+
+void Game::addPacket(sf::Packet& packet){
+    packets_mutex.lock();
+    instance->m_packets.push(packet);
+    packets_mutex.unlock();
 }
 
 sf::RenderWindow* Game::getWindow(){

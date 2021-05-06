@@ -18,7 +18,7 @@ namespace RottEngine{
         bool connect(const char* address, unsigned short port, const std::string& nickname);
         void receivePackets();
         void sendPacket(sf::Packet& packet);
-        const std::unordered_map<sf::Uint8, OnlinePlayer*>& getOnlinePlayers() const;
+        std::unordered_map<sf::Uint8, OnlinePlayer*>* getOnlinePlayers();
         const std::string getNickname() const;
 
     private:

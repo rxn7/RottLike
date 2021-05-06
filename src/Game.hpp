@@ -6,20 +6,15 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <queue>
 
-#include "Engine/Rendering/Tilemap.hpp"
 #include "Engine/StateMachine/State.hpp"
-#include "Engine/Networking/Client.hpp"
 #include "Engine/AssetManager.hpp"
 #include "Engine/Input.hpp"
-#include "FpsTimer.hpp"
-#include "OnlinePlayer.hpp"
-#include "LocalPlayer.hpp"
-#include "States/GameState.hpp"
 #include "States/SplashScreenState.hpp"
 
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
+#define WINDOW_WIDTH 860
+#define WINDOW_HEIGHT 640
 
 class OnlinePlayer;
 
@@ -27,14 +22,20 @@ class Game{
 public:
     Game();
     ~Game();
+    static void addPacket(sf::Packet& packet);
     static void changeState(RottEngine::State* new_state);
+    static void processPacket(sf::Packet& packet, sf::Uint8 type);
     static sf::RenderWindow* getWindow();
+
+private:
+    void processPackets();
 
 private:
     static Game* instance; 
     
     sf::RenderWindow* mp_window;
 
+    std::queue<sf::Packet> m_packets;
     RottEngine::State* m_state;
     RottEngine::State* m_new_state;
     bool m_change_state=false;

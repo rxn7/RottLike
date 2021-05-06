@@ -62,6 +62,8 @@
         "deque": "cpp",
         "stack": "cpp",
         "functional": "cpp",
-        "*.rh": "cpp"
+        "*.rh": "cpp",
+        "mutex": "cpp",
+        "queue": "cpp"
     }
 }

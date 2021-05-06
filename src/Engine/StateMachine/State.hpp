@@ -2,6 +2,7 @@
 
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Network.hpp>
 
 namespace RottEngine{
     class State{
@@ -9,6 +10,7 @@ namespace RottEngine{
         State() {}
         virtual ~State() {}
         virtual void processEvent(const sf::Event& event) = 0;
+        virtual void processPacket(sf::Packet& packet, sf::Uint8 type) = 0;
         virtual void update(const sf::Time& dt) = 0;
         virtual void draw(sf::RenderWindow& window) = 0;
         

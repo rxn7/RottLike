@@ -2,7 +2,6 @@
 
 #include "Engine/StateMachine/State.hpp"
 #include "Engine/AssetManager.hpp"
-#include "Game.hpp"
 #include "States/MainMenuState.hpp"
 #include "Engine/Utils.hpp"
 
@@ -14,6 +13,7 @@ public:
     void processEvent(const sf::Event& event) override;
     void update(const sf::Time& dt) override;
     void draw(sf::RenderWindow& window) override;
+    void processPacket(sf::Packet& packet, sf::Uint8 type) override {}
 
 private:
     void skip();

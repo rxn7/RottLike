@@ -1,4 +1,5 @@
 #include "Client.hpp"
+#include "Game.hpp"
 
 namespace RottEngine{
     Client::~Client(){
@@ -13,6 +14,7 @@ namespace RottEngine{
     bool Client::connect(const char* address, unsigned short port, const std::string& nickname){
         if(m_socket.connect(address, port) != sf::Socket::Done){
             std::cerr << "Couldn't connect to the server!" << std::endl;
+            exit(-1);
             return false;    
         }
         
@@ -32,83 +34,26 @@ namespace RottEngine{
         while(true){
             sf::Packet received_packet;
             if(m_socket.receive(received_packet) == sf::Socket::Done){            
-                // Check packet type
-                sf::Uint8 packet_type;
-                received_packet >> packet_type;
-
                 if(!received_packet){
                     std::cerr << "Failed to receive packet!" << std::endl;
+                    exit(-1);
                     return;
                 }
-
-                switch(packet_type){
-                    case SERVER_PLAYER_CONNECTED:{
-                        sf::Uint8 client_slot;
-                        std::string client_nickname;
-                        received_packet >> client_slot >> client_nickname;
-
-                        if(!m_online_players.count(client_slot)){
-                            OnlinePlayer* new_player = new OnlinePlayer();
-                            new_player->setNickname(client_nickname);
-
-                            m_online_players.insert({client_slot, new_player});
-                            std::cout << "Player with slot " << (int)client_slot << " and nick " << client_nickname << " has connected." << std::endl;
-                        }
-
-                        break;
-                    }
-
-                    case SERVER_PLAYER_DISCONNECTED:{
-                        sf::Uint8 client_slot;
-                        received_packet >> client_slot;
-
-                        if(m_online_players.count(client_slot)){
-                            std::cout << "Player with slot " << (int)client_slot << " and nick " << m_online_players[client_slot]->getNickname() << " has disconnected." << std::endl;
-                            delete m_online_players[client_slot];
-                            m_online_players.erase(client_slot);
-                        }
-
-                        break;
-                    }
-
-                    case SERVER_PLAYER_MOVED:{
-                        sf::Uint8 client_slot;
-
-                        float px, py;
-                        received_packet >> client_slot >> px >> py;
-
-                        if(m_online_players.count(client_slot)){
-                            m_online_players[client_slot]->setPosition(px,py);
-                        }
-
-                        break;
-                    }
-
-                    case SERVER_CHAT:{
-                        sf::Uint8 slot;
-                        std::string msg;
-
-                        received_packet >> slot >> msg;
-                        OnlinePlayer* player = m_online_players[slot];
-
-                        std::cout << "[CHAT] " << player->getNickname() << ": " << msg << std::endl;
-                        Chat::addMessage(player, msg);
-
-                        break;
-                    }
-                }
+                
+                Game::addPacket(received_packet);
             }
         }
     }
 
-    void Client::sendPacket(sf::Packet& packet){
+    void Client::sendPacket(sf::Packet& packet) {
         if(packet.getDataSize() <= 0 || (m_socket.send(packet) != sf::Socket::Done)){
             std::cerr << "Couldn't send packet!" << std::endl;
+            exit(-1);
         }
     }
 
-    const std::unordered_map<sf::Uint8, OnlinePlayer*>& Client::getOnlinePlayers() const{
-        return m_online_players;
+    std::unordered_map<sf::Uint8, OnlinePlayer*>* Client::getOnlinePlayers() {
+        return &m_online_players;
     }
 
     const std::string Client::getNickname() const {

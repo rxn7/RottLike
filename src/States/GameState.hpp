@@ -15,6 +15,7 @@ public:
     void processEvent(const sf::Event& event) override;
     void update(const sf::Time& dt) override;
     void draw(sf::RenderWindow& window) override;
+    void processPacket(sf::Packet& packet, sf::Uint8 type) override;
 
     LocalPlayer* getPlayer() const;
 

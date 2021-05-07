@@ -15,6 +15,7 @@ struct Message{
     enum MessageType{
         MESSAGE,
         DISCONNECTED,
+        CONNECTED,
     };
 
     Message(const std::string& _nick, const std::string& _msg, MessageType _type = MessageType::MESSAGE){
@@ -22,7 +23,6 @@ struct Message{
         this->msg = _msg;
         type = _type;
     }
-
     
     MessageType type;
     std::string nickname;
@@ -42,6 +42,7 @@ public:
     void update();
     void draw(sf::RenderWindow& window);
     
+    void addPlayerConnectedMessage(const std::string& nick);
     void addPlayerDisconnectedMessage(const std::string& nick);
     void addMessage(const std::string& nick, const std::string& msg, Message::MessageType type=Message::MessageType::MESSAGE);
     static Chat* getInstance();

@@ -36,6 +36,8 @@ void GameState::processPacket(sf::Packet& packet, sf::Uint8 type){
             new_player->setNickname(client_nickname);
 
             mp_client->getOnlinePlayers()->insert({client_slot, new_player});
+
+            m_chat.addPlayerConnectedMessage(client_nickname);
             std::cout << "Player with slot " << (int)client_slot << " and nick " << client_nickname << " has connected." << std::endl;
             break;
         }

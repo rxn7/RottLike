@@ -39,6 +39,10 @@ void Chat::addPlayerDisconnectedMessage(const std::string& nick){
     addMessage(nick, "", Message::MessageType::DISCONNECTED);
 }
 
+void Chat::addPlayerConnectedMessage(const std::string& nick){
+    addMessage(nick, "", Message::MessageType::CONNECTED);
+}
+
 void Chat::addMessage(const std::string& nick, const std::string& msg, Message::MessageType type){
     m_messages.push_back(Message(nick, msg, type));
     m_update = true;
@@ -79,6 +83,14 @@ void Chat::updateMessages(){
                 m_chat_text << "\n" << sf::Text::Italic 
                 << sf::Color::Yellow << m.nickname 
                 << sf::Text::Regular << sf::Color::Red << " has disconnected.";
+
+                break;
+            }
+
+            case Message::MessageType::CONNECTED: {
+                m_chat_text << "\n" << sf::Text::Italic 
+                << sf::Color::Yellow << m.nickname 
+                << sf::Text::Regular << sf::Color::Green << " has connected.";
 
                 break;
             }

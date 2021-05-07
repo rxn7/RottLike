@@ -1,7 +1,7 @@
 #include "LocalPlayer.hpp"
 #include "Engine/Networking/Packets.hpp"
 
-LocalPlayer::LocalPlayer(RottEngine::Client* p_client) : mp_client(p_client), m_nametag(this){
+LocalPlayer::LocalPlayer(RottEngine::Client* p_client) : PlayerBase(PlayerType::LOCAL), mp_client(p_client) {
     m_sprite.setTexture(*RottEngine::AssetManager::getTexture("res/sprites/player.png"));
     m_sprite.setScale(3,3);
     m_nametag.setName(p_client->getNickname().c_str(), sf::Color::Cyan);

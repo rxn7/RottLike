@@ -13,6 +13,7 @@ namespace RottEngine {
             Textbox(sf::Font* font, float x, float y, float width, float height, sf::Uint16 limit=0, const sf::Color& idle_color = sf::Color::White, const sf::Color& active_color = sf::Color::Green);
             void processEvent(const sf::Event& event);
             void draw(sf::RenderWindow& window);
+            void setCharSize(sf::Uint8 size);
             void update();
             void clear();
             void focus();

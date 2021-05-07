@@ -5,7 +5,7 @@
 #include "Engine/AssetManager.hpp"
 #include "Engine/Networking/Server.hpp"
 #include "Game.hpp"
-#include "GameState.hpp"
+#include "JoinGameState.hpp"
 
 class MainMenuState : public RottEngine::State {
 public:

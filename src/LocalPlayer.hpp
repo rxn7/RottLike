@@ -11,7 +11,7 @@
  
 class LocalPlayer : public RottEngine::Entity {
 public:
-    LocalPlayer(RottEngine::Client* p_client, const std::string& nickname);
+    LocalPlayer(RottEngine::Client* p_client);
     virtual ~LocalPlayer();
     void update(const sf::Time& dt) override;
     void tick();

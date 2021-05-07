@@ -14,7 +14,6 @@ namespace RottEngine{
     bool Client::connect(const char* address, unsigned short port, const std::string& nickname){
         if(m_socket.connect(address, port) != sf::Socket::Done){
             std::cerr << "Couldn't connect to the server!" << std::endl;
-            exit(-1);
             return false;    
         }
         

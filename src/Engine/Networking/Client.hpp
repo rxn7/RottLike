@@ -13,6 +13,7 @@ class OnlinePlayer;
 namespace RottEngine{
     class Client{
     public:
+        Client() {}
         ~Client();
 
         bool connect(const char* address, unsigned short port, const std::string& nickname);

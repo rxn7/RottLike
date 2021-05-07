@@ -13,8 +13,13 @@ namespace RottEngine {
             m_shape.setFillColor(sf::Color(0,0,0,150));
 
             m_text.setCharacterSize(10);
-            m_text.setPosition(x - (m_shape.getLocalBounds().width/2) + 10, y - height/4);
+            m_text.setPosition(x - (m_shape.getLocalBounds().width/2) + 10, y-(height/4));
+            RottEngine::Utils::centerVer(&m_text);
             m_text.setFont(*font);
+        }
+
+        void Textbox::setCharSize(sf::Uint8 size){
+            m_text.setCharacterSize(size);
         }
 
         void Textbox::processEvent(const sf::Event& event){

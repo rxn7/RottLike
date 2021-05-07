@@ -21,7 +21,7 @@ void MainMenuState::hostGame(){
 }
 
 void MainMenuState::joinGame(){
-    Game::changeState(new GameState());
+    Game::changeState(new JoinGameState());
 }
 
 void MainMenuState::draw(sf::RenderWindow& window){

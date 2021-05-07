@@ -1,15 +1,14 @@
 #include "LocalPlayer.hpp"
 #include "Engine/Networking/Packets.hpp"
 
-LocalPlayer::LocalPlayer(RottEngine::Client* p_client, const std::string& nickname) : mp_client(p_client), m_nametag(this){
+LocalPlayer::LocalPlayer(RottEngine::Client* p_client) : mp_client(p_client), m_nametag(this){
     m_sprite.setTexture(*RottEngine::AssetManager::getTexture("res/sprites/player.png"));
     m_sprite.setScale(3,3);
-    m_nametag.setName(nickname.c_str(), sf::Color::Blue);
+    m_nametag.setName(p_client->getNickname().c_str(), sf::Color::Cyan);
     RottEngine::Utils::center(&m_sprite);
 }
 
 LocalPlayer::~LocalPlayer(){ 
-    delete mp_client;
 }
 
 void LocalPlayer::update(const sf::Time& dt){

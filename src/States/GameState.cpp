@@ -4,28 +4,16 @@
 
 GameState::~GameState(){
     delete mp_player;
+    delete mp_client;
 }
 
-GameState::GameState() {
+GameState::GameState(RottEngine::Client* p_client) : mp_client(p_client) {
     RottEngine::AssetManager::addTexture("res/sprites/player.png");
     RottEngine::AssetManager::addTexture("res/sprites/online_player.png");
     RottEngine::AssetManager::addTexture("res/sprites/tileset.png");
 
-    std::string server_ip, nickname;
-    std::cout << "Enter the server's ip: ";
-    std::cin >> server_ip;
-
-    std::cout << "Enter your nickname: ";
-    std::cin >> nickname;
-
-    if(!m_client.connect(server_ip.c_str(), 26950, nickname)){
-        std::cerr << "Couldn't connect to the server!" << std::endl;
-        return;
-    }
-
-    mp_player = new LocalPlayer(&m_client, nickname);
-
-    m_chat = Chat(&m_client, this);
+    mp_player = new LocalPlayer(mp_client);
+    m_chat = Chat(mp_client, this);
     m_camera = sf::View(sf::Vector2f(0,0), sf::Vector2f(640, 480));
     m_gui_camera = sf::View(sf::Vector2f((float)860/2, (float)640/2), sf::Vector2f(860, 640));
     m_tilemap = RottEngine::Tilemap(RottEngine::AssetManager::getTexture("res/sprites/tileset.png"), 24, 24, 16, 64);
@@ -47,7 +35,7 @@ void GameState::processPacket(sf::Packet& packet, sf::Uint8 type){
             OnlinePlayer* new_player = new OnlinePlayer();
             new_player->setNickname(client_nickname);
 
-            m_client.getOnlinePlayers()->insert({client_slot, new_player});
+            mp_client->getOnlinePlayers()->insert({client_slot, new_player});
             std::cout << "Player with slot " << (int)client_slot << " and nick " << client_nickname << " has connected." << std::endl;
             break;
         }
@@ -56,14 +44,14 @@ void GameState::processPacket(sf::Packet& packet, sf::Uint8 type){
             sf::Uint8 client_slot;
             packet >> client_slot;
 
-            if(m_client.getOnlinePlayers()->count(client_slot)){
-                OnlinePlayer* player = m_client.getOnlinePlayers()->at(client_slot);
+            if(mp_client->getOnlinePlayers()->count(client_slot)){
+                OnlinePlayer* player = mp_client->getOnlinePlayers()->at(client_slot);
                 
                 m_chat.addPlayerDisconnectedMessage(player->getNickname());
                 std::cout << "Player with slot " << (int)client_slot << " and nick: " << player->getNickname() << " has disconnected." << std::endl;
                 
-                delete m_client.getOnlinePlayers()->at(client_slot);
-                m_client.getOnlinePlayers()->erase(client_slot);
+                delete mp_client->getOnlinePlayers()->at(client_slot);
+                mp_client->getOnlinePlayers()->erase(client_slot);
             }
             break;
         }
@@ -74,8 +62,8 @@ void GameState::processPacket(sf::Packet& packet, sf::Uint8 type){
             float px, py;
             packet >> client_slot >> px >> py;
 
-            if(m_client.getOnlinePlayers()->count(client_slot)){
-                m_client.getOnlinePlayers()->at(client_slot)->setPosition(px,py);
+            if(mp_client->getOnlinePlayers()->count(client_slot)){
+                mp_client->getOnlinePlayers()->at(client_slot)->setPosition(px,py);
             }
             break;
         }
@@ -85,7 +73,7 @@ void GameState::processPacket(sf::Packet& packet, sf::Uint8 type){
             std::string msg;
 
             packet >> slot >> msg;
-            OnlinePlayer* player = m_client.getOnlinePlayers()->at(slot);
+            OnlinePlayer* player = mp_client->getOnlinePlayers()->at(slot);
 
             if(player == nullptr){
                 std::cout << "[CHAT] " << "Error receiving a message. Player pointer is null." << std::endl;
@@ -132,7 +120,7 @@ void GameState::draw(sf::RenderWindow& window){
     window.setView(m_camera);
     m_tilemap.draw(window, sf::RenderStates::Default);
 
-    for(auto& player : *m_client.getOnlinePlayers()){
+    for(auto& player : *mp_client->getOnlinePlayers()){
         player.second->draw(window);
     }
 
@@ -145,6 +133,6 @@ void GameState::draw(sf::RenderWindow& window){
     m_chat.draw(window);
 }
 
-LocalPlayer* GameState::getPlayer() const{
+LocalPlayer* GameState::getPlayer() {
     return mp_player;
 }

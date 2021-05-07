@@ -96,6 +96,7 @@ namespace RottEngine{
 
         void Button::setCharSize(sf::Uint8 size){
             m_text.setCharacterSize(size);
+            RottEngine::Utils::center(&m_text);
         }
 
         void Button::setTextColor(const sf::Color& color){

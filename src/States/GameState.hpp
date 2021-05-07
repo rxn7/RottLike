@@ -9,7 +9,7 @@
 
 class GameState : public RottEngine::State{
 public:
-    GameState();
+    GameState(RottEngine::Client* p_client);
     ~GameState();
 
     void processEvent(const sf::Event& event) override;
@@ -17,7 +17,7 @@ public:
     void draw(sf::RenderWindow& window) override;
     void processPacket(sf::Packet& packet, sf::Uint8 type) override;
 
-    LocalPlayer* getPlayer() const;
+    LocalPlayer* getPlayer();
 
 private:
     Chat m_chat;
@@ -27,7 +27,7 @@ private:
     sf::View m_camera, m_gui_camera;
 
     LocalPlayer* mp_player;
-    RottEngine::Client m_client;
+    RottEngine::Client* mp_client;
 
     FpsTimer m_fps_timer;
     sf::Text m_pos_text;

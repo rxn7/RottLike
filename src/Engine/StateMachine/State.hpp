@@ -5,6 +5,7 @@
 #include <SFML/Network.hpp>
 
 namespace RottEngine{
+    /// Remember to set m_ready to true after initialization!!!
     class State{
     public:
         State() {}

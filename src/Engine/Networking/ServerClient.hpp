@@ -11,4 +11,6 @@ public:
 public:
     sf::TcpSocket* m_socket;
     std::string m_nickname;
+    sf::Vector2f m_pos;
+    float m_melee_ang;
 };

@@ -1,4 +1,5 @@
 #include "GameState.hpp"
+#include "Game.hpp"
 
 #define TICK_RATE 0.0416 // 24 tick rate
 
@@ -30,10 +31,14 @@ void GameState::processPacket(sf::Packet& packet, sf::Uint8 type){
         case SERVER_PLAYER_CONNECTED:{
             sf::Uint8 client_slot;
             std::string client_nickname;
-            packet >> client_slot >> client_nickname;
+            float melee_ang, px, py;
+
+            packet >> client_slot >> client_nickname >> px >> py >> melee_ang;
 
             OnlinePlayer* new_player = new OnlinePlayer();
             new_player->setNickname(client_nickname);
+            new_player->updateMelee(melee_ang);
+            new_player->setPosition(px, py);
 
             mp_client->getOnlinePlayers()->insert({client_slot, new_player});
 
@@ -89,6 +94,24 @@ void GameState::processPacket(sf::Packet& packet, sf::Uint8 type){
             m_chat.addMessage(nick, msg);
             break;
         }
+
+        case SERVER_MELEE_UPDATE:{
+            sf::Uint8 slot;
+            float ang_deg;
+
+            packet >> slot >> ang_deg;
+
+            OnlinePlayer* player = mp_client->getOnlinePlayers()->at(slot);
+
+            if(player == nullptr){
+                std::cout << "[CHAT] " << "Error receiving a message. Player pointer is null." << std::endl;
+                return;
+            }
+
+            player->updateMelee(ang_deg);
+
+            break;
+        }
     }
 }
 
@@ -108,6 +131,8 @@ void GameState::update(const sf::Time& dt){
         m_pos_text.setString(pos_text_stream.str());
     }
 
+    // Set the view to world camera, because it's needed to get mouse pos relative to it
+    Game::getWindow()->setView(m_camera);
     mp_player->update(dt);
 
     m_fps_timer.update(dt.asSeconds());
@@ -118,8 +143,6 @@ void GameState::update(const sf::Time& dt){
 }
 
 void GameState::draw(sf::RenderWindow& window){
-    // WORLD
-    window.setView(m_camera);
     m_tilemap.draw(window, sf::RenderStates::Default);
 
     for(auto& player : *mp_client->getOnlinePlayers()){

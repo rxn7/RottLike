@@ -1,24 +1,27 @@
 #pragma once
 
-#include "Engine/Entity.hpp"
+#include <SFML/Graphics.hpp>
 
-#define ITEM_CTOR_PARAMS RottEngine::Entity* p_holder, bool is_local
+#define ITEM_CTOR_PARAMS PlayerBase* p_holder
+
+class PlayerBase;
 
 class Item {
 public:
     Item();
-    Item(RottEngine::Entity* p_holder, bool is_local=true);
+    Item(ITEM_CTOR_PARAMS);
     virtual ~Item();
 
-    void setHolder(RottEngine::Entity* p_holder, bool is_local=true);
+    void setHolder(ITEM_CTOR_PARAMS);
 
-    RottEngine::Entity* getHolder();
+    PlayerBase* getHolder();
     bool isHeldByLocalPlayer() const;
 
     virtual void draw(sf::RenderWindow& window) {}
     virtual void update(const sf::Time& dt) {}
+    virtual void updateMelee(float ang_deg) {}
+    virtual sf::Sprite* getSprite() { return nullptr; }
 
-private:
-    bool m_is_local; // Is the item held by local player
-    RottEngine::Entity* mp_holder;
+protected:
+    PlayerBase* mp_holder;
 };

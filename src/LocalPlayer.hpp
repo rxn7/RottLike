@@ -7,6 +7,7 @@
 #include <SFML/Network.hpp>
 #include "Nametag.hpp"
 #include "PlayerBase.hpp"
+#include "Item/Sword.hpp"
 
 #define PLAYER_MOVE_SPEED 150.0f
  

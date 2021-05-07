@@ -97,6 +97,8 @@ namespace RottEngine{
                                 sf::Packet server_player_moved;
                                 server_player_moved << sf::Uint8(SERVER_PLAYER_MOVED) << slot << px << py;
 
+                                client->m_pos = {px, py};
+
                                 for(ServerClient* c : m_clients){
                                     if(c != client){
                                         c->m_socket->send(server_player_moved);
@@ -118,7 +120,7 @@ namespace RottEngine{
                                 for(ServerClient* c : m_clients){
                                     if(c != client){
                                         sf::Packet player_connected_packet;
-                                        player_connected_packet << sf::Uint8(SERVER_PLAYER_CONNECTED) << getSlot(c) << c->m_nickname;
+                                        player_connected_packet << sf::Uint8(SERVER_PLAYER_CONNECTED) << getSlot(c) << c->m_nickname << c->m_pos.x << c->m_pos.y << c->m_melee_ang;
 
                                         client->m_socket->send(player_connected_packet);
                                         player_connected_packet.clear();
@@ -142,6 +144,19 @@ namespace RottEngine{
                                 sf::Packet server_chat_packet;
                                 server_chat_packet << sf::Uint8(SERVER_CHAT) << getSlot(client) << msg;
                                 sendPacketToAll(server_chat_packet, client);
+
+                                break;
+                            }
+
+                            case CLIENT_MELEE_UPDATE: {
+                                float ang_deg;
+                                packet >> ang_deg;
+
+                                client->m_melee_ang = ang_deg;
+
+                                sf::Packet server_melee_update_packet;
+                                server_melee_update_packet << sf::Uint8(SERVER_MELEE_UPDATE) << slot << ang_deg;
+                                sendPacketToAll(server_melee_update_packet, client);
 
                                 break;
                             }

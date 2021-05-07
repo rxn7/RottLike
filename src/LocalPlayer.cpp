@@ -6,6 +6,8 @@ LocalPlayer::LocalPlayer(RottEngine::Client* p_client) : PlayerBase(PlayerType::
     m_sprite.setScale(3,3);
     m_nametag.setName(p_client->getNickname().c_str(), sf::Color::Cyan);
     RottEngine::Utils::center(&m_sprite);
+
+    setItem(new Sword((PlayerBase*)this));
 }
 
 LocalPlayer::~LocalPlayer(){ 
@@ -29,6 +31,10 @@ void LocalPlayer::update(const sf::Time& dt){
 
     sf::Vector2f pos = m_sprite.getPosition();
     m_nametag.update();
+
+    if(mp_held_item != nullptr){
+        mp_held_item->update(dt);
+    }
 }
 
 void LocalPlayer::tick(){
@@ -52,6 +58,10 @@ void LocalPlayer::tick(){
 void LocalPlayer::draw(sf::RenderWindow& window) {
     window.draw(m_sprite);
     m_nametag.draw(window);
+
+    if(mp_held_item != nullptr){
+        mp_held_item->draw(window);
+    }
 }
 
 RottEngine::Client* LocalPlayer::getClient() const {

@@ -1,6 +1,5 @@
 #include "Server.hpp"
-#include <unordered_map>
-#include "Packets.hpp"
+#include <Windows.h>
 
 #define TICK_RATE 0.0416 // 24 tickrate
 #define PORT 26950
@@ -10,7 +9,7 @@ namespace RottEngine{
             delete c;
         }
     }
-    
+
     Server::Server(){
         std::cout << "Server is starting on port " << PORT << "..." << std::endl;
 
@@ -32,7 +31,11 @@ namespace RottEngine{
             }
         }
 
-        std::cout << "Server is closing..."; 
+        #ifdef DEBUG
+            ShowWindow(GetConsoleWindow(), SW_SHOW);
+        #endif
+
+        std::cout << "Server is closing...";
     }
 
     void Server::update(){
@@ -73,7 +76,7 @@ namespace RottEngine{
             if(m_selector.isReady(*client->m_socket)){
                 sf::Packet packet;
                 sf::Socket::Status status = client->m_socket->receive(packet);
-                
+
                 // If packet has received
                 if(status == sf::Socket::Done){
                     // Check if the packet isnt empty
@@ -110,7 +113,7 @@ namespace RottEngine{
                             case CLIENT_CONNECTED:{
                                 std::string nickname;
                                 packet >> nickname;
-                                
+
                                 m_clients[slot]->m_nickname = nickname;
 
                                 // Get the new client slot
@@ -139,7 +142,7 @@ namespace RottEngine{
                                 std::string msg;
                                 packet >> msg;
 
-                                std::cout << "[CHAT] " << client->m_nickname << ": " << msg << std::endl; 
+                                std::cout << "[CHAT] " << client->m_nickname << ": " << msg << std::endl;
 
                                 sf::Packet server_chat_packet;
                                 server_chat_packet << sf::Uint8(SERVER_CHAT) << getSlot(client) << msg;
@@ -174,7 +177,7 @@ namespace RottEngine{
 
     void Server::disconnectClient(ServerClient* p_client, sf::Uint8 slot){
         std::cout << "Client with ip: " << p_client->m_socket->getRemoteAddress() << " and nick: " << p_client->m_nickname << " has disconnected." << std::endl;
-        
+
         // Remove the client from the server
         m_clients.erase(m_clients.begin() + getSlot(p_client));
         m_selector.remove(*p_client->m_socket);

@@ -36,7 +36,7 @@ void MeleeWeapon::updatePosAndRot(){
     if(prev_rot != ang_deg){
         if(isHeldByLocalPlayer()){
             RottEngine::Client* mp_client = ((LocalPlayer*)mp_holder)->getClient();
-            
+
             sf::Packet melee_update_packet;
             melee_update_packet << sf::Uint8(CLIENT_MELEE_UPDATE) << ang_deg;
 

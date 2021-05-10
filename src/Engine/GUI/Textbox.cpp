@@ -7,14 +7,14 @@ namespace RottEngine {
         Textbox::Textbox(sf::Font* font, float x, float y, float width, float height, sf::Uint16 limit, const sf::Color& idle_color, const sf::Color& active_color) : m_active_color(active_color), m_idle_color(idle_color), m_limit(limit) {
             m_shape.setSize({width, height});
             RottEngine::Utils::center(&m_shape);
-            m_shape.setPosition(x, y);            
+            m_shape.setPosition(x, y);
             m_shape.setOutlineThickness(3);
             m_shape.setOutlineColor(m_idle_color);
             m_shape.setFillColor(sf::Color(0,0,0,150));
 
-            m_text.setCharacterSize(10);
+            m_text.setCharacterSize(16);
+            //RottEngine::Utils::centerVer(&m_text);
             m_text.setPosition(x - (m_shape.getLocalBounds().width/2) + 10, y-(height/4));
-            RottEngine::Utils::centerVer(&m_text);
             m_text.setFont(*font);
         }
 
@@ -74,7 +74,7 @@ namespace RottEngine {
                     //mp_active = nullptr;
                 }
             }
-            
+
 
             // Update the shape outline color
             m_shape.setOutlineColor(mp_active == this ? m_active_color : m_idle_color);
@@ -91,7 +91,7 @@ namespace RottEngine {
 
         void Textbox::delLastChar(){
             std::string str = m_text.getString();
-            
+
             // Check if there's any charachter to delete
             if(str.length() > 0){
                 m_text.setString(str.substr(0, str.size()-1));

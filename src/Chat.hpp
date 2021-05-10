@@ -23,7 +23,7 @@ struct Message{
         this->msg = _msg;
         type = _type;
     }
-    
+
     MessageType type;
     std::string nickname;
     std::string msg;
@@ -37,11 +37,11 @@ public:
     Chat() {}
     Chat(RottEngine::Client* p_client, GameState* p_state);
     ~Chat();
-    
+
     void processEvent(const sf::Event& event);
     void update();
     void draw(sf::RenderWindow& window);
-    
+
     void addPlayerConnectedMessage(const std::string& nick);
     void addPlayerDisconnectedMessage(const std::string& nick);
     void addMessage(const std::string& nick, const std::string& msg, Message::MessageType type=Message::MessageType::MESSAGE);

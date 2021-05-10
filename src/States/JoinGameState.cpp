@@ -14,11 +14,11 @@ JoinGameState::JoinGameState(){
     m_nick_field.setCharSize(20);
 
     m_ip_text.setFont(*font);
-    m_ip_text.setPosition(50, 100);  
-    m_ip_text.setString("IP:");    
-    m_ip_text.setCharacterSize(20);  
+    m_ip_text.setPosition(50, 100);
+    m_ip_text.setString("IP:");
+    m_ip_text.setCharacterSize(20);
     RottEngine::Utils::center(&m_ip_text);
-    
+
     m_nick_text.setFont(*font);
     m_nick_text.setPosition(50, 200);
     m_nick_text.setString("Nick:");
@@ -33,12 +33,12 @@ JoinGameState::~JoinGameState(){
 
 void JoinGameState::tryConnect(){
     mp_client = new RottEngine::Client();
-    
+
     if(mp_client->connect(m_ip_field.getText().c_str(), 26950, m_nick_field.getText())){
         Game::changeState(new GameState(mp_client));
     }else{
         m_ip_field.clear();
-        std::cerr << "Ip is not correct!" << std::endl;
+        std::cerr << "IP is not correct!" << std::endl;
         delete mp_client;
     }
 }

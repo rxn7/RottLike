@@ -9,18 +9,18 @@ Chat::~Chat(){
 }
 
 Chat::Chat(RottEngine::Client* p_client, GameState* p_state) : mp_client(p_client), mp_state(p_state) {
-    m_chat_input = RottEngine::GUI::Textbox(RottEngine::AssetManager::getFont("res/font.ttf"), 860-130, 640-30, 200, 30, 30);
-    
+    m_chat_input = RottEngine::GUI::Textbox(RottEngine::AssetManager::getFont("res/font.ttf"), 860-140, 640-30, 250, 30, 30);
+
     m_chat_text.setFont(*RottEngine::AssetManager::getFont("res/font.ttf"));
-    m_chat_text.setPosition(860-300, 640-75);
-    m_chat_text.setCharacterSize(17);
+    m_chat_text.setPosition(860-280, 640-75);
+    m_chat_text.setCharacterSize(18);
 
     updateTextOrigin();
 }
 
 void Chat::sendMessage(){
     std::string msg = m_chat_input.getText();
-    
+
     if(msg.length() < 1){
         return;
     }
@@ -66,30 +66,30 @@ void Chat::updateMessages(){
     }
 
     std::stringstream str;
-    
+
     m_chat_text.clear();
 
     for(Message& m : m_messages){
         switch(m.type){
             case Message::MessageType::MESSAGE: {
-                m_chat_text << "\n" << sf::Text::Italic 
-                << sf::Color::Green << m.nickname 
+                m_chat_text << "\n" << sf::Text::Italic
+                << sf::Color::Green << m.nickname
                 << sf::Text::Regular << sf::Color::White << ": " << m.msg;
-                
+
                 break;
             }
 
             case Message::MessageType::DISCONNECTED: {
-                m_chat_text << "\n" << sf::Text::Italic 
-                << sf::Color::Yellow << m.nickname 
+                m_chat_text << "\n" << sf::Text::Italic
+                << sf::Color::Yellow << m.nickname
                 << sf::Text::Regular << sf::Color::Red << " has disconnected.";
 
                 break;
             }
 
             case Message::MessageType::CONNECTED: {
-                m_chat_text << "\n" << sf::Text::Italic 
-                << sf::Color::Yellow << m.nickname 
+                m_chat_text << "\n" << sf::Text::Italic
+                << sf::Color::Yellow << m.nickname
                 << sf::Text::Regular << sf::Color::Green << " has connected.";
 
                 break;

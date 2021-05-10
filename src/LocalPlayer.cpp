@@ -10,7 +10,7 @@ LocalPlayer::LocalPlayer(RottEngine::Client* p_client) : PlayerBase(PlayerType::
     setItem(new Sword((PlayerBase*)this));
 }
 
-LocalPlayer::~LocalPlayer(){ 
+LocalPlayer::~LocalPlayer(){
 }
 
 void LocalPlayer::update(const sf::Time& dt){
@@ -48,7 +48,7 @@ void LocalPlayer::tick(){
     if(m_previous_pos != curr_pos){
         sf::Packet player_moved_packed;
         player_moved_packed << sf::Uint8(CLIENT_PLAYER_MOVED) << curr_pos.x << curr_pos.y;
-        
+
         mp_client->sendPacket(player_moved_packed);
     }
 

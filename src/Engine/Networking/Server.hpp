@@ -4,6 +4,8 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <thread>
+#include <unordered_map>
+#include "Packets.hpp"
 
 namespace RottEngine{
     class Server{

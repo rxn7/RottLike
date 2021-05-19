@@ -10,7 +10,7 @@ namespace RottEngine{
         Tilemap() {} 
         Tilemap(sf::Texture* texture, int width, int height, float tile_txt_dimension, float tile_world_dimension);
 
-        void draw(sf::RenderWindow& window, sf::RenderStates states);
+        void draw(sf::RenderWindow& window);
 
     private:
         void addTileVerts(const Tile& tile, sf::Vector2f pos);

@@ -5,7 +5,7 @@
 #include "Engine/Entity.hpp"
 #include "Engine/AssetManager.hpp"
 #include <SFML/Network.hpp>
-#include "Nametag.hpp"
+#include "NameTag.hpp"
 #include "PlayerBase.hpp"
 #include "Item/Sword.hpp"
 

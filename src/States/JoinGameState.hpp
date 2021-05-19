@@ -1,10 +1,8 @@
 #pragma once
 
-#include "Engine/StateMachine/State.hpp"
-#include "Engine/GUI/Textbox.hpp"
-#include "Engine/GUI/Button.hpp"
-#include "Engine/Networking/Client.hpp"
-#include "GameState.hpp"
+#include "../Engine/GUI/Button.hpp"
+#include "../Engine/Networking/Client.hpp"
+#include "../Engine/StateMachine/State.hpp"
 
 class JoinGameState : public RottEngine::State{
 public:

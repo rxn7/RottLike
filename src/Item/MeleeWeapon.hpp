@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Item.hpp"
-#include "Engine/Input.hpp"
+#include "../Engine/Input.hpp"
 
 class MeleeWeapon : public Item {
 public:

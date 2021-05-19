@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Engine/StateMachine/State.hpp"
-#include "Engine/AssetManager.hpp"
-#include "States/MainMenuState.hpp"
-#include "Engine/Utils.hpp"
+#include "../Engine/StateMachine/State.hpp"
+#include "../Engine/AssetManager.hpp"
+#include "../States/MainMenuState.hpp"
+#include "../Engine/Utils.hpp"
 
 class SplashScreenState : public RottEngine::State{
 public:

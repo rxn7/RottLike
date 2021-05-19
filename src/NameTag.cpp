@@ -2,7 +2,7 @@
 
 NameTag::NameTag(RottEngine::Entity* entity) : mp_entity(entity){
     m_text.setScale(0.6, 0.6); 
-    m_text.setFont(*RottEngine::AssetManager::getFont("res/font.ttf"));
+    m_text.setFont(*RottEngine::AssetManager::getFont("res/font.TTF"));
     m_text.setOutlineThickness(3);
     m_text.setOutlineColor(sf::Color::Black);
     RottEngine::Utils::center(&m_text);

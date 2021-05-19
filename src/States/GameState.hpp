@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Engine/StateMachine/State.hpp"
-#include "Engine/Rendering/Tilemap.hpp"
-#include "Engine/AssetManager.hpp"
-#include "FpsTimer.hpp"
-#include "LocalPlayer.hpp"
-#include "Chat.hpp"
+#include "../Engine/StateMachine/State.hpp"
+#include "../Engine/Rendering/Tilemap.hpp"
+#include "../Engine/AssetManager.hpp"
+#include "../FpsTimer.hpp"
+#include "../LocalPlayer.hpp"
+#include "../Chat.hpp"
 
 class GameState : public RottEngine::State{
 public:

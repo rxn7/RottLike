@@ -1,6 +1,7 @@
 #include "MeleeWeapon.hpp"
-#include "PlayerBase.hpp"
-#include "Game.hpp"
+#include "../PlayerBase.hpp"
+#include "../Game.hpp"
+#include "../LocalPlayer.hpp"
 
 MeleeWeapon::MeleeWeapon() : Item() {
 }

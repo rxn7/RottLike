@@ -1,8 +1,8 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "Engine/Utils.hpp"
-#include "Engine/Input.hpp"
+#include "../Utils.hpp"
+#include "../Input.hpp"
 #include <iostream>
 #include <functional>
 

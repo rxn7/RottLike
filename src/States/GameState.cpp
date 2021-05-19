@@ -1,5 +1,5 @@
 #include "GameState.hpp"
-#include "Game.hpp"
+#include "../Game.hpp"
 
 #define TICK_RATE 0.0416 // 24 tick rate
 
@@ -21,7 +21,7 @@ GameState::GameState(RottEngine::Client* p_client) : mp_client(p_client) {
 
     m_pos_text.move(0, 30);
     m_pos_text.setString("x: ?\ny: ?");
-    m_pos_text.setFont(*RottEngine::AssetManager::getFont("res/font.ttf"));
+    m_pos_text.setFont(*RottEngine::AssetManager::getFont("res/font.TTF"));
 
     m_ready = true;
 }
@@ -143,7 +143,7 @@ void GameState::update(const sf::Time& dt){
 }
 
 void GameState::draw(sf::RenderWindow& window){
-    m_tilemap.draw(window, sf::RenderStates::Default);
+    m_tilemap.draw(window);
 
     for(auto& player : *mp_client->getOnlinePlayers()){
         player.second->draw(window);

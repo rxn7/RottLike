@@ -1,9 +1,11 @@
 #include "Tilemap.hpp"
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 
 namespace RottEngine{
     Tilemap::Tilemap(sf::Texture* p_texture, int width, int height, float tile_txt_dimension, float tile_world_dimension)
         : width(width), height(height), m_tile_txt_dimension(tile_txt_dimension), m_tile_world_dimension(tile_world_dimension), mp_texture(p_texture)
-    {
+	{
         //                                                      4 vertices per tile
         m_vertex_array = sf::VertexArray(sf::PrimitiveType::Quads, width*height*4);
 
@@ -33,8 +35,9 @@ namespace RottEngine{
             sf::Vector2f(m_tile_txt_dimension * tile.x, m_tile_txt_dimension * tile.y + m_tile_txt_dimension)));
     }
 
-    void Tilemap::draw(sf::RenderWindow& window, sf::RenderStates states){
-        states.texture = mp_texture;
-        window.draw(m_vertex_array, states);
+    void Tilemap::draw(sf::RenderWindow& window){
+		sf::RenderStates render_states;
+		render_states.texture = mp_texture;
+		window.draw(m_vertex_array, render_states);
     }
 }

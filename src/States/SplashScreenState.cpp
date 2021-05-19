@@ -9,7 +9,7 @@ SplashScreenState::SplashScreenState(){
     m_logo.setOrigin(m_logo.getLocalBounds().width/2, m_logo.getLocalBounds().height/2);
     m_logo.setPosition(WINDOW_WIDTH/2, 0-(m_logo.getLocalBounds().height/2));
 
-    m_skip_text.setFont(*RottEngine::AssetManager::getFont("res/font.ttf"));
+    m_skip_text.setFont(*RottEngine::AssetManager::getFont("res/font.TTF"));
     m_skip_text.setString("Press any key to skip.");
     m_skip_text.setPosition(WINDOW_WIDTH/2, WINDOW_HEIGHT - 50);
     m_skip_text.setOutlineThickness(3);

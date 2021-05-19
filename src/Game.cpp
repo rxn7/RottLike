@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include <mutex>
 
 #define TICK_RATE 0.0416 // 24 tickrate
 
@@ -14,7 +15,7 @@ Game* Game::instance;
 Game::Game(){
     instance = this;
 
-    RottEngine::AssetManager::addFont("res/font.ttf");
+    RottEngine::AssetManager::addFont("res/font.TTF");
 
     m_state = new SplashScreenState();
 

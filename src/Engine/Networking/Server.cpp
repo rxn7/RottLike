@@ -1,5 +1,8 @@
 #include "Server.hpp"
+
+#ifdef _WIN32
 #include <Windows.h>
+#endif
 
 #define TICK_RATE 0.0416 // 24 tickrate
 #define PORT 26950
@@ -31,7 +34,7 @@ namespace RottEngine{
             }
         }
 
-        #ifdef DEBUG
+        #ifdef _WIN32
             ShowWindow(GetConsoleWindow(), SW_SHOW);
         #endif
 

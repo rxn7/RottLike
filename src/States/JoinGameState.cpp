@@ -1,10 +1,11 @@
 #include "JoinGameState.hpp"
-#include "Game.hpp"
+#include "../Game.hpp"
+#include "GameState.hpp"
 
 JoinGameState::JoinGameState(){
-    sf::Font* font = RottEngine::AssetManager::getFont("res/font.ttf");
+    sf::Font* font = RottEngine::AssetManager::getFont("res/font.TTF");
 
-    m_connect_btn = RottEngine::GUI::Button(860/2, 640-200, 200, 50, font, "Connect", std::bind(&tryConnect, this));
+    m_connect_btn = RottEngine::GUI::Button(860/2, 640-200, 200, 50, font, "Connect", std::bind(&JoinGameState::tryConnect, this));
     m_connect_btn.setCharSize(24);
 
     m_ip_field = RottEngine::GUI::Textbox(font, 300, 100, 300, 50, 22);

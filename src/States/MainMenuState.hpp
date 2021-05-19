@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Engine/StateMachine/State.hpp"
-#include "Engine/GUI/Button.hpp"
-#include "Engine/AssetManager.hpp"
-#include "Engine/Networking/Server.hpp"
+#include "../Engine/StateMachine/State.hpp"
+#include "../Engine/GUI/Button.hpp"
+#include "../Engine/AssetManager.hpp"
+#include "../Engine/Networking/Server.hpp"
 #include "Game.hpp"
 #include "JoinGameState.hpp"
 

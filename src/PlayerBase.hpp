@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Item/Item.hpp"
-#include "Nametag.hpp"
+#include "NameTag.hpp"
 
 enum PlayerType { LOCAL, ONLINE };
 class PlayerBase : public RottEngine::Entity {

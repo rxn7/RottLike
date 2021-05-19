@@ -1,7 +1,7 @@
 #include "FpsTimer.hpp"
 
 FpsTimer::FpsTimer() {
-    m_text.setFont(*RottEngine::AssetManager::getFont("res/font.ttf"));
+    m_text.setFont(*RottEngine::AssetManager::getFont("res/font.TTF"));
     m_text.setScale(0.9f, 0.9f);
     m_text.setString("FPS: 0");
 }

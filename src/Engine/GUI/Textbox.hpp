@@ -2,8 +2,8 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "Engine/Utils.hpp"
-#include "Engine/Input.hpp"
+#include "../Utils.hpp"
+#include "../Input.hpp"
 
 namespace RottEngine {
     namespace GUI {

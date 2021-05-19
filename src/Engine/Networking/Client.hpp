@@ -5,7 +5,7 @@
 #include <thread>
 #include <unordered_map>
 #include "Packets.hpp"
-#include "OnlinePlayer.hpp"
+#include "../../OnlinePlayer.hpp"
 #include "Chat.hpp"
 
 class OnlinePlayer;

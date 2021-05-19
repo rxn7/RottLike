@@ -1,6 +1,6 @@
 #include "Sword.hpp"
-#include "PlayerBase.hpp"
-#include "Game.hpp"
+#include "../PlayerBase.hpp"
+#include "../Game.hpp"
 
 Sword::~Sword(){
 

@@ -1,6 +1,8 @@
 #include "Client.hpp"
 #include "Game.hpp"
 
+class Game;
+
 namespace RottEngine{
     Client::~Client(){
         m_socket.disconnect();
@@ -18,7 +20,7 @@ namespace RottEngine{
         }
 
         std::cout << "Connected to the server!" << std::endl;
-        m_update_thread = std::thread(&receivePackets, this);
+        m_update_thread = std::thread(&Client::receivePackets, this);
 
         m_nickname = nickname;
 

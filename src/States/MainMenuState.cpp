@@ -1,11 +1,12 @@
 #include "MainMenuState.hpp"
 #include "Engine/Networking/Server.hpp"
+#include "../Game.hpp"
 
 MainMenuState::MainMenuState(){
-    m_host_game_button = RottEngine::GUI::Button(860/4, 640/2, 860/2, 640, RottEngine::AssetManager::getFont("res/font.ttf"), "Host New Game", std::bind(&hostGame, this));
+    m_host_game_button = RottEngine::GUI::Button(860/4, 640/2, 860/2, 640, RottEngine::AssetManager::getFont("res/font.TTF"), "Host New Game", std::bind(&MainMenuState::hostGame, this));
     m_host_game_button.setCharSize(25);
 
-    m_join_game_button = RottEngine::GUI::Button(860 - (860/4), 640/2, 860/2, 640, RottEngine::AssetManager::getFont("res/font.ttf"), "Join a Game", std::bind(&joinGame, this));
+    m_join_game_button = RottEngine::GUI::Button(860 - (860/4), 640/2, 860/2, 640, RottEngine::AssetManager::getFont("res/font.TTF"), "Join a Game", std::bind(&MainMenuState::joinGame, this));
     m_join_game_button.setCharSize(25);
     
     m_ready = true;

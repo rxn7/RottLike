@@ -1,5 +1,5 @@
 #include "Item.hpp"
-#include "PlayerBase.hpp"
+#include "../PlayerBase.hpp"
 
 Item::Item(){
 

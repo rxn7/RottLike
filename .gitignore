@@ -1,7 +1,4 @@
-/AssetManager.o
-/Entity.o
-/FpsTimer.o
-/LocalPlayer.o
+/*.o
 /sfml-audio-2.dll
 /sfml-graphics-2.dll
 /sfml-system-2.dll
